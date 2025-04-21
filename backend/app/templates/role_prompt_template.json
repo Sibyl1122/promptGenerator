@@ -1,0 +1,6 @@
+{
+  "name": "Role-based Expert Template",
+  "content": "# Role-based Expert Prompt\n\n## Role\nI want you to act as [specific role/expert, e.g., a senior marketing strategist, a medical doctor, a software architect].\n\n## Task\n[Describe the specific task or problem you want the AI to solve in this role]\n\n## Context\n[Provide any necessary background information or context about the situation]\n\n## Constraints\n[List any limitations, requirements, or specific parameters the AI should consider]\n\n## Output Format\n[Specify how you want the response formatted]\n\n## Requirements\n- Your response should demonstrate deep expertise in this field\n- Use appropriate terminology and frameworks from this domain\n- Provide practical, actionable advice\n- Consider both standard approaches and creative solutions",
+  "status": "active",
+  "description": "A template that frames the AI as a specific type of expert or professional. This approach leverages role-playing to access domain-specific knowledge and reasoning styles."
+} 

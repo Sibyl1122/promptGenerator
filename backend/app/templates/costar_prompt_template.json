@@ -1,0 +1,6 @@
+{
+  "name": "CO-STAR Framework Template",
+  "content": "# CO-STAR Prompt Framework\n\n## Context\n[Provide relevant background information about the situation or problem. What does the AI need to know about the scenario?]\n\n## Objective\n[Clearly define the specific task or goal you want the AI to accomplish. What exact outcome are you seeking?]\n\n## Style\n[Specify the writing style you want the AI to use (e.g., academic, conversational, like a specific expert or personality)]\n\n## Tone\n[Define the attitude or emotional context for the response (e.g., formal, enthusiastic, professional, humorous)]\n\n## Audience\n[Identify who will be reading or using this response (e.g., technical experts, beginners, children, executives)]\n\n## Response Format\n[Specify exactly how you want the response structured (e.g., bullet points, step-by-step guide, JSON format, essay, code)]\n\n---\n\n[Your specific query or request here]",
+  "status": "active",
+  "description": "A comprehensive prompt structure based on the CO-STAR framework (Context, Objective, Style, Tone, Audience, Response). This template helps create well-structured prompts that generate more precise and useful AI responses."
+} 
