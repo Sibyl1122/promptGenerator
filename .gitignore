@@ -114,3 +114,5 @@ lmcache/experimental/tests
 venv/
 
 */config.toml
+images/*
+prd.md
