@@ -12,4 +12,5 @@ def init_db(app):
         from .prompt_template import PromptTemplate
         from .prompt import Prompt
         from .prompt_version import PromptVersion
-        from .prompt_shots import PromptShots 
+        from .prompt_shots import PromptShots
+        from .model_config import ModelConfig 

@@ -9,9 +9,12 @@ import {
   Tabs,
   Tab,
   Snackbar,
-  Alert
+  Alert,
+  IconButton,
+  Tooltip
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { getPrompt, updatePrompt, getPromptVersions, getPromptShots } from '../services/api';
 import PromptForm from '../components/PromptForm';
 import PromptPlayground from '../components/PromptPlayground';
@@ -80,7 +83,7 @@ const PromptDetailPage = () => {
       await updatePrompt(id, promptData);
       setSnackbar({
         open: true,
-        message: 'Prompt updated successfully',
+        message: 'Prompt updated successfully. A new version has been created.',
         severity: 'success'
       });
       fetchPromptData();
@@ -91,6 +94,25 @@ const PromptDetailPage = () => {
         severity: 'error'
       });
     }
+  };
+
+  const handleCopyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(
+      () => {
+        setSnackbar({
+          open: true,
+          message: 'Copied to clipboard!',
+          severity: 'success'
+        });
+      },
+      () => {
+        setSnackbar({
+          open: true,
+          message: 'Failed to copy to clipboard',
+          severity: 'error'
+        });
+      }
+    );
   };
 
   const handleTabChange = (event, newValue) => {
@@ -146,6 +168,14 @@ const PromptDetailPage = () => {
         </Tabs>
 
         <TabPanel value={tabValue} index={0}>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Typography variant="h6">Prompt Content (Version {prompt?.latest_version})</Typography>
+            <Tooltip title="Copy prompt">
+              <IconButton onClick={() => handleCopyToClipboard(prompt?.content)}>
+                <ContentCopyIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
           <PromptPlayground 
             promptContent={prompt?.content} 
             promptId={parseInt(id)} 
@@ -153,6 +183,9 @@ const PromptDetailPage = () => {
         </TabPanel>
 
         <TabPanel value={tabValue} index={1}>
+          <Typography variant="body2" color="text.secondary" paragraph>
+            Editing this prompt will create a new version. The latest version is always used by default.
+          </Typography>
           <PromptForm 
             initialData={{
               id: prompt?.id,
@@ -173,9 +206,16 @@ const PromptDetailPage = () => {
               </Typography>
               {versions.map((version) => (
                 <Paper key={version.id} sx={{ p: 2, mb: 2 }}>
-                  <Typography variant="subtitle1">
-                    Version {version.version} - {new Date(version.created_time).toLocaleString()}
-                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="subtitle1">
+                      Version {version.version} {version.version === prompt?.latest_version && '(Current)'} - {new Date(version.created_time).toLocaleString()}
+                    </Typography>
+                    <Tooltip title="Copy this version">
+                      <IconButton onClick={() => handleCopyToClipboard(version.content)}>
+                        <ContentCopyIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                   <Typography variant="body2" color="text.secondary">
                     Created by: {version.creator}
                   </Typography>
@@ -200,9 +240,16 @@ const PromptDetailPage = () => {
               </Typography>
               {shots.map((shot) => (
                 <Paper key={shot.id} sx={{ p: 2, mb: 2 }}>
-                  <Typography variant="subtitle1">
-                    {new Date(shot.created_time).toLocaleString()}
-                  </Typography>
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <Typography variant="subtitle1">
+                      {new Date(shot.created_time).toLocaleString()}
+                    </Typography>
+                    <Tooltip title="Copy execution">
+                      <IconButton onClick={() => handleCopyToClipboard(shot.content)}>
+                        <ContentCopyIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
                   <Box sx={{ mt: 1, p: 2, backgroundColor: '#f5f5f5', borderRadius: 1 }}>
                     <pre style={{ margin: 0, whiteSpace: 'pre-wrap' }}>
                       {shot.content}

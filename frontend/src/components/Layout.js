@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import HomeIcon from '@mui/icons-material/Home';
 import ChatIcon from '@mui/icons-material/Chat';
 import TemplateIcon from '@mui/icons-material/Description';
+import SettingsIcon from '@mui/icons-material/Settings';
 import Container from '@mui/material/Container';
 
 const drawerWidth = 240;
@@ -33,6 +34,7 @@ function Layout({ children }) {
     { text: 'Home', path: '/', icon: <HomeIcon /> },
     { text: 'Prompts', path: '/prompts', icon: <ChatIcon /> },
     { text: 'Templates', path: '/templates', icon: <TemplateIcon /> },
+    { text: 'Model Config', path: '/models', icon: <SettingsIcon /> },
   ];
 
   const drawer = (

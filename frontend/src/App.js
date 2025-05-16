@@ -11,6 +11,7 @@ import HomePage from './pages/HomePage';
 import PromptListPage from './pages/PromptListPage';
 import PromptDetailPage from './pages/PromptDetailPage';
 import TemplateListPage from './pages/TemplateListPage';
+import ModelConfigPage from './pages/ModelConfigPage';
 
 // Create theme
 const theme = createTheme({
@@ -35,6 +36,7 @@ function App() {
           <Route path="/prompts" element={<PromptListPage />} />
           <Route path="/prompts/:id" element={<PromptDetailPage />} />
           <Route path="/templates" element={<TemplateListPage />} />
+          <Route path="/models" element={<ModelConfigPage />} />
         </Routes>
       </Layout>
     </ThemeProvider>

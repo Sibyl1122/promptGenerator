@@ -1,0 +1,1 @@
+import os, sys; sys.path.append('/Users/sunjie/proj/promptGenerator/backend'); from app import create_app; app = create_app(); ctx = app.app_context(); ctx.push(); from app.models.model_config import ModelConfig; print('Model configs:', [m.to_dict() for m in ModelConfig.query.all()])

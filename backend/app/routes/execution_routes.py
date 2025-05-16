@@ -14,13 +14,13 @@ def execute():
     
     # Extract parameters
     prompt = data.get('prompt')
-    model = data.get('model')
+    model_id = data.get('model_id')
     temperature = data.get('temperature')
     max_tokens = data.get('max_tokens')
     
     # Execute the prompt
     try:
-        result = execute_prompt(prompt, model, temperature, max_tokens)
+        result = execute_prompt(prompt, model_id, temperature, max_tokens)
         
         # If prompt_id is provided, save this execution as a shot
         prompt_id = data.get('prompt_id')
@@ -34,7 +34,7 @@ def execute():
         
         return jsonify({
             'result': result,
-            'model': model,
+            'model_id': model_id,
             'temperature': temperature,
             'max_tokens': max_tokens
         })
