@@ -3,7 +3,7 @@
 # Default model to use
 model = "deepseek/deepseek-r1:free"
 base_url = "https://openrouter.ai/api/v1"
-api_key = "sk-or-v1-5953"
+api_key = "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"
 max_tokens = 4000
 temperature = 0.7
 api_type = "openai"  # Using OpenAI-compatible API format
@@ -15,18 +15,10 @@ DEFAULT_MODEL = "deepseek/deepseek-r1:free"
 DEFAULT_TEMPERATURE = 0.7
 DEFAULT_MAX_TOKENS = 4096
 
-# LLM provider settings
-[LLM_PROVIDERS.openai]
-api_type = "openai"
-base_url = "https://openrouter.ai/api/v1"
-api_key = "sk-or-v1-5953"
 
-# 本地模型配置
-[llm.local]
-model = "deepseek/deepseek-r1:free"
-base_url = "https://openrouter.ai/api/v1"
-api_key = "sk-or-v1-5953"
-max_tokens = 4000
-temperature = 0.7
-api_type = "openai"
-api_version = "" 
+
+# 数据库配置
+[database]
+uri = "sqlite:///prompt_generator.db"  # SQLite数据库路径
+track_modifications = false
+echo = false 

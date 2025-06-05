@@ -1,40 +1,81 @@
-import os
+import threading
+import tomllib
+from pathlib import Path
+from typing import Dict, List, Optional
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
 
+
 class Config:
-    # Flask configuration
-    SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-key-for-development'
-    DEBUG = os.environ.get('FLASK_ENV') == 'development'
-    
-    # Database configuration
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///prompt_generator.db'
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    
-    # API Keys for LLM services
-    OPENAI_API_KEY = os.environ.get('OPENAI_API_KEY')
-    ANTHROPIC_API_KEY = os.environ.get('ANTHROPIC_API_KEY')
-    
-    # LLM configuration
-    LLM_PROVIDERS = {
-        'openai': {
-            'api_key': os.environ.get('OPENAI_API_KEY'),
-            'base_url': os.environ.get('OPENAI_BASE_URL', 'https://api.openai.com/v1'),
-            'api_type': 'openai',
-            'models': ['gpt-3.5-turbo', 'gpt-4']
-        },
-        'qwen': {
-            'api_key': os.environ.get('QWEN_API_KEY', 'EMPTY'),
-            'base_url': os.environ.get('QWEN_BASE_URL', 'http://8.211.150.31:8000/v1'),
-            'api_type': 'open_ai',
-            'models': [os.environ.get('QWEN_MODEL', 'Qwen/Qwen2.5-7B-Instruct')]
-        }
-    }
-    
-    # Default model configuration
-    DEFAULT_PROVIDER = os.environ.get('DEFAULT_PROVIDER', 'openai')
-    DEFAULT_MODEL = os.environ.get('DEFAULT_MODEL', 'gpt-3.5-turbo')
-    DEFAULT_TEMPERATURE = float(os.environ.get('DEFAULT_TEMPERATURE', 0.7))
-    DEFAULT_MAX_TOKENS = int(os.environ.get('DEFAULT_MAX_TOKENS', 1000)) 
+    _instance = None
+    _lock = threading.Lock()
+    _initialized = False
+
+    def __new__(cls):
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+        return cls._instance
+
+    def __init__(self):
+        if not self._initialized:
+            with self._lock:
+                if not self._initialized:
+                    self._config = None
+                    self._load_initial_config()
+                    self._initialized = True
+
+    @staticmethod
+    def _get_config_path() -> Path:
+        root = Path(__file__).resolve().parent.parent
+        config_path = root / "config" / "config.toml"
+        if config_path.exists():
+            return config_path
+        example_path = root / "config" / "config.example.toml"
+        if example_path.exists():
+            return example_path
+        raise FileNotFoundError("No configuration file found in config directory")
+
+    def _load_config(self) -> dict:
+        config_path = self._get_config_path()
+        with config_path.open("rb") as f:
+            return tomllib.load(f)
+
+    def _load_initial_config(self):
+        raw_config = self._load_config()
+        
+        # 数据库配置
+        db_config = raw_config.get("database", {})
+        self._database_uri = db_config.get("uri", "sqlite:///prompt_generator.db")
+        self._track_modifications = db_config.get("track_modifications", False)
+        self._echo = db_config.get("echo", False)
+
+    @property
+    def database(self):
+        class DatabaseSettings:
+            def __init__(self, uri, track_modifications, echo):
+                self.uri = uri
+                self.track_modifications = track_modifications
+                self.echo = echo
+        
+        return DatabaseSettings(
+            self._database_uri,
+            self._track_modifications,
+            self._echo
+        )
+
+    @property
+    def workspace_root(self) -> Path:
+        """Get the workspace root directory"""
+        return Path(__file__).resolve().parent.parent / "workspace"
+
+    @property
+    def root_path(self) -> Path:
+        """Get the root path of the application"""
+        return Path(__file__).resolve().parent.parent
+
+
+config = Config()

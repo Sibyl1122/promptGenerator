@@ -116,3 +116,6 @@ venv/
 */config.toml
 images/*
 prd.md
+
+*/node_modules/
+*/package-lock.json

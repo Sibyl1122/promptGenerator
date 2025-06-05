@@ -4,9 +4,12 @@ Flask extensions and configuration variables
 import os
 import tomllib
 from pathlib import Path
+from .config.config import config
 
 def init_extensions(app):
     """Initialize Flask extensions and configuration variables"""
+    
+    # 数据库配置已经在__init__.py中设置
     
     # Load config.toml file
     config_path = Path(__file__).resolve().parent.parent / "config" / "config.toml"
